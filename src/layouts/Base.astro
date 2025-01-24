@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Body from '../components/Body.astro';
 import Footer from '../components/Footer.astro';
+import Card from '../components/Card.astro';
 
 const { titre } = Astro.props;
 ---
@@ -16,6 +17,7 @@ const { titre } = Astro.props;
     <body>
         <Header/>
         <Body/>
+        
         <Footer/>
         <main>
             <slot />
