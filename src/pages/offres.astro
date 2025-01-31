@@ -5,23 +5,34 @@ import { getOffres } from "../backend.mjs";
 const offres = await getOffres();
 ---
 
-
 <Base titre="Offres">
-        <h1 class="text-4xl mb-4">Offres!</h1>
-        <p class="mb-6">Ceci est la page des offres. ;)</p>
-        <div x-data="{ showFavorites: false }">
-            <button @click="showFavorites = !showFavorites" class="mb-4 px-4 py-2 bg-green-500 text-white rounded">
-                <span x-show="!showFavorites">Afficher les favoris</span>
+    <h1 class="text-4xl mb-4">Offres!</h1>
+    <p class="mb-6">Ceci est la page des offres. ;)</p>
+    <div x-data="{ showFavorites: false, view: 'grid' }">
+        <div class="flex space-x-4 mb-4">
+            <button @click="showFavorites = !showFavorites" class="px-4 py-2 bg-yellow-500 text-white rounded">
+                <span x-show="!showFavorites">Afficher les favori</span>
                 <span x-show="showFavorites">Afficher tout</span>
             </button>
-        
-            <div x-show="!showFavorites" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {offres.map((offre) => <Card {...offre} />)}
-            </div>
-            <div x-show="showFavorites" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {offres.map((offre) => offre.favori && <Card {...offre} />)}
-            </div>
+            <button @click="view = 'grid'" class="px-4 py-2 bg-red-500 text-white rounded" :class="{ 'bg-red-700': view === 'grid' }">
+                Afficher en grille</button>
+            <button @click="view = 'list'" class="px-4 py-2 bg-purple-500 text-white rounded" :class="{ 'bg-purple-700': view === 'list' }">
+                Afficher en liste</button>
         </div>
-            
+
+        <div x-show="!showFavorites && view === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {offres.map((offre) => <Card {...offre} />)}
+        </div>
+        <div x-show="showFavorites && view === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {offres.map((offre) => offre.favori && <Card {...offre} />)}
+        </div>
+        <div x-show="!showFavorites && view === 'list'" class="space-y-4 ">
+            {offres.map((offre) => <Card {...offre} isList={true} />)}
+        </div>
+        <div x-show="showFavorites && view === 'list'" class="space-y-4">
+            {offres.map((offre) => offre.favori && <Card {...offre} isList={true} />)}
+        </div>
+    </div>
 </Base>
+
 
