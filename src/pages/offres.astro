@@ -2,13 +2,13 @@
 import Base from "../layouts/Base.astro";
 import Card from "../components/Card.astro";
 import { getOffres } from "../backend.mjs";
-const events = await getOffres();
+const offres = await getOffres();
 ---
 
 
 <Base titre="Offres">
-        <h1 class="text-4xl mb-4">Offres !</h1>
-        <p class="mb-6">Ceci est la page des offres. Vous trouverez sur cette page différentes offres</p>
+        <h1 class="text-4xl mb-4">Offres!</h1>
+        <p class="mb-6">Ceci est la page des offres. ;)</p>
         <div x-data="{ showFavorites: false }">
             <button @click="showFavorites = !showFavorites" class="mb-4 px-4 py-2 bg-green-500 text-white rounded">
                 <span x-show="!showFavorites">Afficher les favoris</span>
@@ -16,10 +16,10 @@ const events = await getOffres();
             </button>
         
             <div x-show="!showFavorites" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {events.map((offre) => <Card {...offre} />)}
+                {offres.map((offre) => <Card {...offre} />)}
             </div>
             <div x-show="showFavorites" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {events.map((offre) => offre.favori && <Card {...offre} />)}
+                {offres.map((offre) => offre.favori && <Card {...offre} />)}
             </div>
         </div>
             
