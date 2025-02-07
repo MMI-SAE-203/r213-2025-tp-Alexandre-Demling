@@ -1,0 +1,78 @@
+---
+import { Picture } from 'astro:assets';
+import IconBed from '../assets/IconBed.svg'
+import IconBath from '../assets/IconBath.svg'
+import IconArea from '../assets/IconArea.svg'
+import IconLove from '../assets/IconLove.svg'
+import DefaultImage from '../assets/house.avif'
+import { oneHouse } from '../backend.mjs';
+
+export interface Props {
+  key: string;
+  title: string;
+  price: number;
+  address: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  image: string;
+}
+
+const { key, title, price, address, bedrooms, bathrooms, area, image } = Astro.props;
+
+// Make sure oneHouse is a function and use it correctly
+let house;
+try {
+  house = await oneHouse(key);
+} catch (error) {
+  console.error('Error fetching house data:', error);
+  house = null;
+}
+
+const imageUrl = house && house.house_img && house.house_img[0]
+  ? `https://estatery.pockethost.io/api/files/${house.collectionId}/${house.id}/${house.house_img[0]}`
+  : DefaultImage;
+
+console.log('Image URL:', imageUrl);
+---
+
+<article>
+  <a href={`/properties/${key}`}>
+    <img 
+      src={imageUrl || "/placeholder.svg"}
+      alt={`Image de ${title}`}
+      width={400}
+      height={300}
+      class="block rounded-t-lg overflow-hidden object-cover w-full h-48"
+    />
+  </a>
+  <div class="relative bg-white px-6 py-8 border border-indigo-200 border-t-0 rounded-b-lg space-y-4">
+    <p class="text-gray-500 flex items-center">
+      <span class="text-2xl font-bold text-indigo-500">${price}</span>/month
+    </p>
+    <h3 class="text-2xl font-semibold">
+      <a class="text-black" href={`/properties/${key}`}>{title}</a>
+    </h3>
+    <button class="absolute right-6 top-8 !mt-0 border border-indigo-200 rounded-full p-2">
+      <IconLove class="stroke-indigo-500 relative top-[1px]"/>
+    </button>
+    <address class="text-gray-500 not-italic border-b border-indigo-100 pb-4">
+      {address}
+    </address>
+
+    <ul class="flex justify-between text-sm *:flex *:gap-2">
+      <li>
+        <IconBed class="size-5 stroke-indigo-500" /> <span>{bedrooms} beds</span>
+      </li>
+      <li>
+        <IconBath class="size-5 stroke-indigo-500" /> <span>{bathrooms} bathrooms</span>
+      </li>
+      <li>
+        <IconArea class="size-5 stroke-indigo-500" /> <span>{area} m<sup>2</sup></span>
+      </li>
+    </ul>
+    <a href={`/offres/surface/${area}`} class="mt-4 inline-block bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors">
+        Voir maisons > {area}m²
+      </a>
+  </div>
+</article>

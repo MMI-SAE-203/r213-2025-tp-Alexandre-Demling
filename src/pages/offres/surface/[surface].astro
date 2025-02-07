@@ -1,0 +1,18 @@
+---
+import {bySurface} from "../../../backend.mjs";
+import Base  from '../../../layouts/Base.astro';
+import Card from "../../../components/Card.astro";
+
+const {surface} = Astro.params;
+const offres = await bySurface(surface);
+if(!offres){
+   return Astro.redirect('/offres');
+}
+---
+
+<Base titre={surface}>
+    <h1 class="text-4xl my-4">Maison avec une surface supérieur a {surface}m²</h1>
+    <div class="grid grid-cols-3 gap-4">
+        {offres.map((offre) => <Card {...offre} />)}
+    </div>
+</Base>

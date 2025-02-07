@@ -1,5 +1,6 @@
 ---
 import { getOffre } from '../../backend.mjs';
+import CardComplet from '../../components/CardComplet.astro';
 import Base from '../../layouts/Base.astro';
 
 const { id } = Astro.params;
@@ -11,12 +12,13 @@ if(!offre){
 
 <Base titre={offre.nomMaison}>
     <h2>{offre.nomMaison}</h2>
-    <ul>
+    <CardComplet {...offre} />
+   <!--  <ul>
         <li>Adresse: {offre.adresse}</li>
         <li>Prix: {offre.prix} €</li>
         <li>Surface: {offre.surface} m²</li>
         <li>Nombre de pièces: {offre.pieces}</li>
         <li>Description: {offre.description}</li>
     </ul>
-    <img src={offre.image || "/placeholder.svg"} alt={offre.nomMaison} />
+    <img src={offre.image || "/placeholder.svg"} alt={offre.nomMaison} /> -->
 </Base>
