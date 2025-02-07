@@ -1,5 +1,6 @@
 ---
 const {nom_maison, nbChambres, nbSdb, prix, surface, favori, imgUrl} = Astro.props;
+const offre = Astro.props;
 ---
 
 <div x-data={`{favori: ${favori}}`} x-bind:class="{'bg-pink-700': favori}" class="p-4 m-4 border border-gray-200 rounded-lg">
@@ -10,4 +11,5 @@ const {nom_maison, nbChambres, nbSdb, prix, surface, favori, imgUrl} = Astro.pro
     <p class="">{prix}$</p>
     <p class="">{surface} m²</p> -->   
     <button x-on:click="favori = !favori" class="bg-yellow-500 text-cyan-50 rounded-2xl p-3">Favori</button>
+    <a href={`/offres/${offre.id}`}>Voir plus</a>
 </div>
