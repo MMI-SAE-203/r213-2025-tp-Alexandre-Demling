@@ -1,0 +1,23 @@
+---
+import { addOffre } from "../../backend.mjs";
+import Base from "../../layouts/Base.astro";
+let message = '';
+if (Astro.request.method === "POST") {
+    const formData = await Astro.request.formData();
+    const response = await addOffre(formData);
+    message = response.message;
+}
+---
+<Base>
+    <h1 class="text-lg">Ajouter une offre</h1>
+    <form class="flex flex-col p-4" action="/offres/add" method="POST" enctype="multipart/form-data">
+        <input type="text" name="nom_maison" placeholder="Nom de la maison" required class="w-full mt-2 p-2 border border-blue-600 rounded-md bg-pink-900" />
+        <input type="number" name="prix" placeholder="Prix" class="w-full mt-2 p-2 border border-pink-600 rounded-md bg-blue-900"/>
+        <input type="number" name="nb_sdb" placeholder="Nombre de salles de bain" class="w-full mt-2 p-2 border border-blue-600 rounded-md bg-pink-900"/>
+        <input type="number" name="nb_bedroom" placeholder="Nombre de chambres" class="w-full mt-2 p-2 border border-pink-600 rounded-md bg-blue-900"/>
+        <input type="number" name="surface" placeholder="Superficie" class="w-full mt-2 p-2 border border-blue-600 rounded-md bg-pink-900"/>
+        <input type="text" name="adresse" placeholder="Adresse" class="w-full mt-2 p-2 border border-pink-600 rounded-md bg-blue-900"/>
+        <input type="file" name="image"  />
+        <button type="submit">Ajouter</button>
+    </form>
+</Base>
