@@ -1,6 +1,7 @@
 ---
 const {nom_maison, nbChambres, nbSdb, prix, surface, favori, imgUrl} = Astro.props;
 const offre = Astro.props;
+
 ---
 
 <div x-data={`{favori: ${favori}}`} x-bind:class="{'bg-pink-700': favori}" class="p-4 m-4 border border-gray-200 rounded-lg">
@@ -10,6 +11,26 @@ const offre = Astro.props;
     <p class="">{nbSdb} Sdb</p>
     <p class="">{prix}$</p>
     <p class="">{surface} m²</p> -->   
-    <button x-on:click="favori = !favori" class="bg-yellow-500 text-cyan-50 rounded-2xl p-3">Favori</button>
-    <a href={`/offres/${offre.id}`}>Voir plus</a>
+    <button @click="clickFavori">
+      <img :src="favori ? '/favorite_filled.png' : '/favorite.png'" alt="Favorite Icon" class="w-6 h-6" />
+  </button>
+  <a href={`/offres/${offre.id}`} class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Voir plus</a>
 </div>
+
+<button 
+        class="absolute bottom-0 left-0 p-2 text-white rounded-br-lg" 
+        @click="clickFavori"
+    >
+        <img 
+            :src="favori ? '/favorite_filled.png' : '/favorite.png'" 
+            alt="Favorite Icon" 
+            class="w-6 h-6"
+        />
+    </button>
+
+
+<script>
+   //@ts-nocheck
+   import { setFavori } from "/src/backend.mjs";
+   window.setFavori = setFavori;
+</script>

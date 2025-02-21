@@ -1,0 +1,26 @@
+---
+// src/pages/agent/[id].astro
+import Layout from "../../layouts/Base.astro";
+import { allEventsByAgent } from "../../backend.mjs";
+import Card from "../../components/Card.astro";
+
+const { id } = Astro.params;
+const eventsByAgent = await allEventsByAgent(id);
+
+if (!eventsByAgent || eventsByAgent.length === 0) {
+    return Astro.redirect("/agent");
+}
+
+const agentName = eventsByAgent[0]?.expand?.Agent ? 
+    `${eventsByAgent[0].expand.Agent.nom} ${eventsByAgent[0].expand.Agent.prenom}` : 
+    'Agent Inconnu';
+---
+
+<Layout title={`Propriétés de ${agentName}`}>
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold mb-8">Propriétés de {agentName}</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {eventsByAgent.map((offre) => <Card offre={offre} />)}
+        </div>
+    </main>
+</Layout>

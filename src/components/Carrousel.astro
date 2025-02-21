@@ -1,0 +1,12 @@
+---
+const {maison} = Astro.props;
+---
+
+<div x-data=`{maisons:${JSON.stringify(maison)}, index: 0 }`>
+    <h1 class="text-3xl"><span x-text="maisons[index].title"></span></h1>
+    <img x-bind:src="maisons[index].image" alt="image" class="w-auto h-auto object-cover"/>
+    <div>
+        <button @click="index = (index === 0 ? maisons.length - 1 : index - 1)" class="bg-gray-800 text-white p-2">Précédent</button>
+        <button @click="index = (index === maisons.length - 1 ? 0 : index + 1)" class="bg-gray-800 text-white p-2">Suivant</button>
+    </div>
+</div>
