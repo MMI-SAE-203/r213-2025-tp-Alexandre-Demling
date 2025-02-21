@@ -85,21 +85,25 @@ export async function addOffre(house) {
 
     export async function allEventsByAgent(agentId) {
         try {
-            console.log("ok dans allEvent", agentId);
+            console.log("Recherche des événements pour l'agent:", agentId);
             
-            let maisons = await db.collection("maison").getFullList({
-                filter: `Agent = "${agentId}"`,
-                expand: "Agent",
+            let events = await db.collection("maison").getFullList({
+                filter: `agent = "${agentId}"`,
+                expand: "agent",
             });
-            maisons = maisons.map((maison) => {
-                maison.img = db.files.getURL(maison, maison.image);
-                return maison;
-            });
-            console.log("les maisons",{maisons});
             
-            return maisons;
+            console.log("Événements bruts:", events);
+            
+            events = events.map((event) => ({
+                ...event,
+                img: event.image ? db.files.getURL(event, event.image) : null
+            }));
+            
+            console.log("Événements traités:", events);
+            
+            return events;
         } catch (error) {
-            console.error("error allEventsByAgent: ", error);
+            console.error("Erreur dans allEventsByAgent:", error);
             return [];
         }
     }

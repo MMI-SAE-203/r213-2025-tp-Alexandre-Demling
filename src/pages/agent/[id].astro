@@ -1,26 +1,41 @@
 ---
-// src/pages/agent/[id].astro
 import Layout from "../../layouts/Base.astro";
 import { allEventsByAgent } from "../../backend.mjs";
-import Card from "../../components/Card.astro";
+import Carousel from "../../components/Carrousel.astro";
+
+console.log("Début du script [id].astro");
 
 const { id } = Astro.params;
-const eventsByAgent = await allEventsByAgent(id);
+console.log("ID de l'agent:", id);
+
+let eventsByAgent;
+try {
+    eventsByAgent = await allEventsByAgent(id);
+    console.log("Événements récupérés:", eventsByAgent);
+} catch (error) {
+    console.error("Erreur lors de la récupération des événements:", error);
+    eventsByAgent = null;
+}
 
 if (!eventsByAgent || eventsByAgent.length === 0) {
+    console.log(`Aucun événement trouvé pour l'agent ${id}`);
     return Astro.redirect("/agent");
 }
 
-const agentName = eventsByAgent[0]?.expand?.Agent ? 
-    `${eventsByAgent[0].expand.Agent.nom} ${eventsByAgent[0].expand.Agent.prenom}` : 
-    'Agent Inconnu';
+let agentName = "Agent Inconnu";
+if (eventsByAgent[0]?.expand?.agent) {
+    agentName = `${eventsByAgent[0].expand.agent.nom} ${eventsByAgent[0].expand.agent.prenom}`;
+} else {
+    console.log("Impossible de trouver les informations de l'agent dans les données");
+}
+
+console.log("Nom de l'agent:", agentName);
 ---
 
-<Layout title={`Propriétés de ${agentName}`}>
-    <main class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold mb-8">Propriétés de {agentName}</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eventsByAgent.map((offre) => <Card offre={offre} />)}
-        </div>
-    </main>
+<Layout title="Agent">
+    <h1 class="text-6xl">Events by {agentName}</h1>
+    <p>Nombre d'événements : {eventsByAgent.length}</p>
+    <div>
+        <Carousel events={eventsByAgent} />
+    </div>
 </Layout>

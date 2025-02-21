@@ -1,12 +1,25 @@
 ---
-const {maison} = Astro.props;
+const { ...agent } = Astro.props;
 ---
 
-<div x-data=`{maisons:${JSON.stringify(maison)}, index: 0 }`>
-    <h1 class="text-3xl"><span x-text="maisons[index].title"></span></h1>
-    <img x-bind:src="maisons[index].image" alt="image" class="w-auto h-auto object-cover"/>
-    <div>
-        <button @click="index = (index === 0 ? maisons.length - 1 : index - 1)" class="bg-gray-800 text-white p-2">Précédent</button>
-        <button @click="index = (index === maisons.length - 1 ? 0 : index + 1)" class="bg-gray-800 text-white p-2">Suivant</button>
-    </div>
-</div>
+<a
+  href={`/agents/${agent.id}`}
+  class="block max-w-sm mx-auto my-6 bg-white rounded-xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+>
+  <div class="text-center space-y-3">
+    <h3 class="text-2xl font-light text-gray-900">
+      <span class="block text-sm uppercase text-gray-500 mb-1"
+        >Agent </span
+      >
+      {agent.prenom_agent}
+      <span class="font-medium">{agent.nom_agent}</span>
+    </h3>
+    <span
+      class="inline-block text-gray-600 text-sm group-hover:text-black transition-colors duration-200"
+    >
+      <span class="border-b border-gray-300 group-hover:border-black pb-0.5">
+        {agent.email_agent}
+      </span>
+    </span>
+  </div>
+</a>
